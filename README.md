@@ -1,10 +1,11 @@
 ## Vehicle Detection
 
 <p align='center'>
-<img src="https://github.com/wiwawo/CarND-Advanced-Lane-Finding/blob/master/output_images/ZoneBetweenLinesBig.png" width="480" alt="lane lines" />
+<img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking
+/blob/master/output_images/classifier_test_0.png" width="480" alt="vehicle tracking" />
 </p>
 
-In this project, the goal is to write a software pipeline to detect vehicles in a video. Code will be partially reused from the previous project "Advanced Lane Finding" (the first 724 rows of code).
+In this project, the goal is to write a software pipeline to detect vehicles in a video. Code will be partially reused from the previous project ["Advanced Lane Finding"](https://github.com/wiwawo/CarND-Advanced-Lane-Finding) (the first 724 rows of code).
 
 The steps of this project are the following:
 
@@ -22,20 +23,23 @@ The steps of this project are the following:
 
 ### Pipeline
 ---
-Since there is mostly processing of visual information in the project, I will demonstrate each step of the pipeline with a picture. To see exact code for every transformation, please check the file [carnd_advanced_lines.py](carnd_advanced_lines.py). To be sure, that the chosen algorithms perform well on test images, all test images will be processed and visualised.
+Since there is mostly processing of visual information in the project, I will demonstrate each step of the pipeline with a picture. To see exact code for every transformation, please check the file [vehicle_detection_and_tracking.py](vehicle_detection_and_tracking.py). To be sure, that the chosen algorithms perform well on test images, all test images will be processed and visualised.
 
 ---
 #### Analysis of the input data/images
 ---
 The labeled data used for training the classifier was download from here:
 [vehicle](https://s3.amazonaws.com/udacity-sdc/Vehicle_Tracking/vehicles.zip) and [non-vehicle](https://s3.amazonaws.com/udacity-sdc/Vehicle_Tracking/non-vehicles.zip). These example images come from a combination of the [GTI vehicle image database](http://www.gti.ssr.upm.es/data/Vehicle_database.html), the [KITTI vision benchmark suite](http://www.cvlibs.net/datasets/kitti/), and examples extracted from the project video itself.
-There is a count of 8792  cars and 8968  non-cars
-of size:  (64, 64, 3)  and data type: float32
-The data set seems to be balanced well.
+
+    There is a count of 8792  cars and 8968  non-cars
+    of size:  (64, 64, 3)  and data type: float32
+    The data set seems to be balanced well.
+
 I glance over the folders with the images for cars/notcars and didn't see any mismatch between labels and images.The data can be used to train a classifier.
 Each images of a car/not a car is a image of 64 by 64 pixels with 3 RGB channels.
 <p align='center'>
-<img src="https://github.com/wiwawo/CarND-Advanced-Lane-Finding/blob/master/output_images/cv2.drawChessboardCorners.jpg" width="480" alt="lane lines" />
+<img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking
+/blob/master/output_images/non-vehicle.jpg" width="480" alt="non vehicle" />
 </p>
 
 
@@ -44,19 +48,14 @@ Each images of a car/not a car is a image of 64 by 64 pixels with 3 RGB channels
 ---
 The simplest way would be to do template matching between the images in our training set and the test images. The problem with this method, that it is not possible to have templates for all possible situations (weather conditions, day time, car color etc.), therefore I won't consider this technique here.
 In my pipeline I used 3 techniques:
-1) Histogram of colors (histogram of pixel intensity (color histograms) is used as features):
-<p align='center'>
-<img src="https://github.com/wiwawo/CarND-Advanced-Lane-Finding/blob/master/output_images/abs_sobel_thresh.jpg" width="480" alt="lane lines" />
-</p>
+1) Histogram of colors (histogram of pixel intensity (color histograms) is used as features.
 32 histogram color bins were used with bins range (0,256). For the 8-bit images bigger values than 32 won't bring any improvement, but will consume more memory. With lower number of color bins will decrease a number of significant features in the output.
 2) Spatial Binning of Color (raw pixel values are used to get a feature vector in searching for cars):
-<p align='center'>
-<img src="https://github.com/wiwawo/CarND-Advanced-Lane-Finding/blob/master/output_images/abs_sobel_thresh.jpg" width="480" alt="lane lines" />
-</p>
 Spatial binning dimensions were 32 by 32. Bigger dimensions required much more memory than smaller dimensions, small dimensions do not provide enough significant features to separate car from notcars. 32 by 32 is the optimum for my pipeline and hardware.
 3) Histogram of Oriented Gradients(HOG) features of the images (shows gradients of values in images).
 <p align='center'>
-<img src="https://github.com/wiwawo/CarND-Advanced-Lane-Finding/blob/master/output_images/abs_sobel_thresh.jpg" width="480" alt="lane lines" />
+<img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking
+/blob/master/output_images/Hog Visualisation.jpg" width="480" alt="HOG" />
 </p>
 For the HOG following parameters were used:
 orient = 9 . Orientation binning: each pixel within the cell casts a weighted vote for an orientation-based histogram channel based on the values found in the gradient computation. Dalal and Triggs found that unsigned gradients used in conjunction with 9 histogram channels performed best in their human detection experiments, therefore I will stick with 9 histogram channels for the car detection task.
@@ -65,34 +64,58 @@ cell_per_block = 2 To provide better illumination invariance (lighting, shadows,
 etc.) normalization of the cells across larger regions incorporating
 multiple cells: “blocks” is done.
 The values of HOG parameters were chosen after some experiments with them and recommendation from different sources (e.g. Dalal and Triggs).
-
 After calculating the features I stuck them vertically for further use:
-X = np.vstack((car_features, notcar_features)).astype(np.float64)
+
+    X = np.vstack((car_features, notcar_features)).astype(np.float64)
 
 Color space/conversion RGB2YCrCb was used in the pipeline (I tried some other color spaces, but with RGB2YCrCb I achieved faster better results and kept using it further in the pipeline).
+
 ---
 #### Features normalization and training the classifier
 ---
  Now I can train a classifier, but first, as in any machine learning application, the data has to be normalized. Python's sklearn package provides the StandardScaler() method to scale the feature vectors to zero mean and unit variance.
 
-from sklearn.preprocessing import StandardScaler
-
+    from sklearn.preprocessing import StandardScaler
+<p align='center'>
+ <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking
+/blob/master/output_images/normalized_and_raw_featuresclassifier_test_0.jpg" width="480" alt="normalized features" />
+ </p>
 
 There a lot of classifiers in sklean.svm (e.g. LinearSVC, NuSVC, SVR etc.). I tried several of them and linear SVC showed the optimal speed/accuracy result on my hardware:
 
-23.72 Seconds to train SVC
-Test Accuracy of SVC =  0.982
-My SVC predicts:  [ 1.  1.  1.  0.  0.  0.  1.  1.  0.  1.]
-For these 10 labels:  [ 1.  1.  1.  0.  0.  0.  1.  0.  0.  1.]
-0.00154 Seconds to predict 10 labels with SVC
+    23.72 Seconds to train SVC
+    Test Accuracy of SVC =  0.982
+    My SVC predicts:  [ 1.  1.  1.  0.  0.  0.  1.  1.  0.  1.]
+    For these 10 labels:  [ 1.  1.  1.  0.  0.  0.  1.  0.  0.  1.]
+    0.00154 Seconds to predict 10 labels with SVC
 
 The data was split in training and validation set. Better than 98% accuracy was achieved with the linear classifier on the validation set.
 
  Here are results of applying trained classifier to the test images. The heatmap shows sliding windows where the classifier detected cars.
-
- <img src="https://github.com/wiwawo/CarND-Advanced-Lane-Finding/blob/master/output_images/abs_sobel_thresh.jpg" width="480" alt="lane lines" />
+<p align='center'>
+ <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking
+/blob/master/output_images/classifier_test_0.jpg" width="480" alt="lane lines" />
  </p>
-
+<p align='center'>
+ <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking
+/blob/master/output_images/classifier_test_1.jpg" width="480" alt="lane lines" />
+ </p>
+ <p align='center'>
+ <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking
+/blob/master/output_images/classifier_test_2.jpg" width="480" alt="lane lines" />
+ </p>
+ <p align='center'>
+ <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking
+/blob/master/output_images/classifier_test_3.jpg" width="480" alt="lane lines" />
+ </p>
+ <p align='center'>
+ <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking
+/blob/master/output_images/classifier_test_4.jpg" width="480" alt="lane lines" />
+ </p>
+ <p align='center'>
+ <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking
+/blob/master/output_images/classifier_test_5.jpg" width="480" alt="lane lines" />
+ </p>
 Having pipeline, that works on the individual frames, it was not difficult to apply the pipeline on individual frames of videos. The program analyzes/remembers several video frames and then sum together using bitwise_and operation. I there were any false detections, the probability is high, that those false detection won't happen in a sequence of frames. Otherwise, if there is a car, it will be detected on the most adjacent video frames.
 heat = cv2.bitwise_and(heatmap_global[i], heat)
 The pipeline did work well on test project video: there are not a lot false positive detections on the video.
