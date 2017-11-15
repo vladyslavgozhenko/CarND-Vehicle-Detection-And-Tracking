@@ -34,7 +34,7 @@ The labeled data used for training the classifier was download from here:
     of size:  (64, 64, 3)  and data type: float32
 
 The data set seems to be balanced well.
-I glance over the folders with the images for cars/notcars and didn't see any mismatch between labels and images.The data can be used to train a classifier.
+I glanced over the folders with the images for cars/notcars and didn't see any mismatch between labels and images.The data can be used to train a classifier.
 Each images of a car/not a car is a image of 64 by 64 pixels with 3 RGB channels.
 <p align='center'>
 <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking/blob/master/output_images/non-vehicle.jpg" width="480" alt="non vehicle" />
