@@ -1,7 +1,7 @@
 ## Vehicle Detection
 
 <p align='center'>
-<img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking/blob/master/output_images/classifier_test_0.jpg" width="480" alt="vehicle tracking" />
+<img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking/blob/master/output_images/classifier_test_0.png" width="480" alt="vehicle tracking" />
 </p>
 
 In this project, the goal is to write a software pipeline to detect vehicles in a video. Code will be partially reused from the previous project ["Advanced Lane Finding"](https://github.com/wiwawo/CarND-Advanced-Lane-Finding) (the first 724 rows of code).
@@ -74,7 +74,7 @@ Color space/conversion RGB2YCrCb was used in the pipeline (I tried some other co
 
     from sklearn.preprocessing import StandardScaler
 <p align='center'>
- <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking/blob/master/output_images/normalized_and_raw_featuresclassifier_test_0.jpg" width="480" alt="normalized features" />
+ <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking/blob/master/output_images/normalized_and_raw_features.jpg" width="480" alt="normalized features" />
  </p>
 
 There a lot of classifiers in sklean.svm (e.g. LinearSVC, NuSVC, SVR etc.). I tried several of them and linear SVC showed the optimal speed/accuracy result on my hardware:
