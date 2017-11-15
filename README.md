@@ -1,8 +1,7 @@
 ## Vehicle Detection
 
 <p align='center'>
-<img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking
-/blob/master/output_images/classifier_test_0.png" width="480" alt="vehicle tracking" />
+<img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking/blob/master/output_images/classifier_test_0.jpg" width="480" alt="vehicle tracking" />
 </p>
 
 In this project, the goal is to write a software pipeline to detect vehicles in a video. Code will be partially reused from the previous project ["Advanced Lane Finding"](https://github.com/wiwawo/CarND-Advanced-Lane-Finding) (the first 724 rows of code).
@@ -38,8 +37,7 @@ The labeled data used for training the classifier was download from here:
 I glance over the folders with the images for cars/notcars and didn't see any mismatch between labels and images.The data can be used to train a classifier.
 Each images of a car/not a car is a image of 64 by 64 pixels with 3 RGB channels.
 <p align='center'>
-<img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking
-/blob/master/output_images/non-vehicle.jpg" width="480" alt="non vehicle" />
+<img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking/blob/master/output_images/non-vehicle.jpg" width="480" alt="non vehicle" />
 </p>
 
 
@@ -54,8 +52,7 @@ In my pipeline I used 3 techniques:
 Spatial binning dimensions were 32 by 32. Bigger dimensions required much more memory than smaller dimensions, small dimensions do not provide enough significant features to separate car from notcars. 32 by 32 is the optimum for my pipeline and hardware.
 3) Histogram of Oriented Gradients(HOG) features of the images (shows gradients of values in images).
 <p align='center'>
-<img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking
-/blob/master/output_images/Hog Visualisation.jpg" width="480" alt="HOG" />
+<img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking/blob/master/output_images/Hog Visualisation.jpg" width="480" alt="HOG" />
 </p>
 For the HOG following parameters were used:
 orient = 9 . Orientation binning: each pixel within the cell casts a weighted vote for an orientation-based histogram channel based on the values found in the gradient computation. Dalal and Triggs found that unsigned gradients used in conjunction with 9 histogram channels performed best in their human detection experiments, therefore I will stick with 9 histogram channels for the car detection task.
@@ -77,8 +74,7 @@ Color space/conversion RGB2YCrCb was used in the pipeline (I tried some other co
 
     from sklearn.preprocessing import StandardScaler
 <p align='center'>
- <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking
-/blob/master/output_images/normalized_and_raw_featuresclassifier_test_0.jpg" width="480" alt="normalized features" />
+ <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking/blob/master/output_images/normalized_and_raw_featuresclassifier_test_0.jpg" width="480" alt="normalized features" />
  </p>
 
 There a lot of classifiers in sklean.svm (e.g. LinearSVC, NuSVC, SVR etc.). I tried several of them and linear SVC showed the optimal speed/accuracy result on my hardware:
@@ -93,29 +89,34 @@ The data was split in training and validation set. Better than 98% accuracy was 
 
  Here are results of applying trained classifier to the test images. The heatmap shows sliding windows where the classifier detected cars.
 <p align='center'>
- <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking
-/blob/master/output_images/classifier_test_0.jpg" width="480" alt="lane lines" />
+ <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking/blob/master/output_images/classifier_test_0.jpg" width="480" alt="lane lines" />
  </p>
 <p align='center'>
- <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking
-/blob/master/output_images/classifier_test_1.jpg" width="480" alt="lane lines" />
+ <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking/blob/master/output_images/classifier_test_1.jpg" width="480" alt="lane lines" />
  </p>
  <p align='center'>
- <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking
-/blob/master/output_images/classifier_test_2.jpg" width="480" alt="lane lines" />
+ <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking/blob/master/output_images/classifier_test_2.jpg" width="480" alt="lane lines" />
  </p>
  <p align='center'>
- <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking
-/blob/master/output_images/classifier_test_3.jpg" width="480" alt="lane lines" />
+ <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking/blob/master/output_images/classifier_test_3.jpg" width="480" alt="lane lines" />
  </p>
  <p align='center'>
- <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking
-/blob/master/output_images/classifier_test_4.jpg" width="480" alt="lane lines" />
+ <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking/blob/master/output_images/classifier_test_4.jpg" width="480" alt="lane lines" />
  </p>
  <p align='center'>
- <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking
-/blob/master/output_images/classifier_test_5.jpg" width="480" alt="lane lines" />
+ <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking/blob/master/output_images/classifier_test_5.jpg" width="480" alt="lane lines" />
  </p>
+ 
+ To save time on calculation:
+ * only half of the image was analysed (part of the image above the horizont line was ignored). 
+ * different sizes of sliding windows were used. It is clear, that cars closer to our car should be bigger (visually), and distant cars - smaller:
+ <p align='center'>
+ <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking/blob/master/output_images/simple_sliding_windows.png" width="480" alt="lane lines" />
+ </p>
+ <p align='center'>
+ <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking/blob/master/output_images/advanced_sliding_windows.png" width="480" alt="lane lines" />
+ </p>
+ 
 Having pipeline, that works on the individual frames, it was not difficult to apply the pipeline on individual frames of videos. The program analyzes/remembers several video frames and then sum together using bitwise_and operation. I there were any false detections, the probability is high, that those false detection won't happen in a sequence of frames. Otherwise, if there is a car, it will be detected on the most adjacent video frames.
 heat = cv2.bitwise_and(heatmap_global[i], heat)
 The pipeline did work well on test project video: there are not a lot false positive detections on the video.
