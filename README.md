@@ -37,7 +37,7 @@ The data set seems to be balanced well.
 I glanced over the folders with the images for cars/notcars and didn't see any mismatch between labels and images.The data can be used to train a classifier.
 Each images of a car/not a car is a image of 64 by 64 pixels with 3 RGB channels.
 <p align='center'>
-<img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking/blob/master/output_images/non-vehicle.jpg" width="480" alt="non vehicle" />
+<img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking/blob/master/output_images/car_not_car.png" width="480" alt="non vehicle" />
 </p>
 
 
@@ -89,22 +89,22 @@ The data was split in training and validation set. Better than 98% accuracy was 
 
  Here are results of applying trained classifier to the test images. The heatmap shows sliding windows where the classifier detected cars.
 <p align='center'>
- <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking/blob/master/output_images/classifier_test_0.jpg" width="480" alt="lane lines" />
+ <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking/blob/master/output_images/classifier_test_0.png" width="480" alt="lane lines" />
  </p>
 <p align='center'>
- <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking/blob/master/output_images/classifier_test_1.jpg" width="480" alt="lane lines" />
+ <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking/blob/master/output_images/classifier_test_1.png" width="480" alt="lane lines" />
  </p>
  <p align='center'>
- <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking/blob/master/output_images/classifier_test_2.jpg" width="480" alt="lane lines" />
+ <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking/blob/master/output_images/classifier_test_2.png" width="480" alt="lane lines" />
  </p>
  <p align='center'>
- <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking/blob/master/output_images/classifier_test_3.jpg" width="480" alt="lane lines" />
+ <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking/blob/master/output_images/classifier_test_3.png" width="480" alt="lane lines" />
  </p>
  <p align='center'>
- <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking/blob/master/output_images/classifier_test_4.jpg" width="480" alt="lane lines" />
+ <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking/blob/master/output_images/classifier_test_4.png" width="480" alt="lane lines" />
  </p>
  <p align='center'>
- <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking/blob/master/output_images/classifier_test_5.jpg" width="480" alt="lane lines" />
+ <img src="https://github.com/wiwawo/CarND-Vehicle-Detection-And-Tracking/blob/master/output_images/classifier_test_5.png" width="480" alt="lane lines" />
  </p>
  
  To save time on calculation:
